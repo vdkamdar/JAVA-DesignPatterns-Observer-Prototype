@@ -1,0 +1,17 @@
+package studentCoursesBackup.util;
+
+public class TreeBuilder{
+    private Node root;
+
+    public TreeBuilder(){
+	root = null;
+    }
+
+    public void insert(TreeBuiler tree, int b_number){
+	if(tree.root == null){
+	    tree.root = new Node(b_number);
+	    tree.root.parent = null;
+	}
+	
+    }
+}
