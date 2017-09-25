@@ -1,0 +1,16 @@
+package studentCoursesBackup.myTree;
+
+import java.util.ArrayList;
+
+public class Node implements ObserverI, SubjectI{
+    private int b_number;
+    private ArrayList<String> courses = new ArrayList<String>();
+    Node newNode, left, right, parent;
+
+    public Node(int b_number){
+	this.left = null;
+	this.right = null;
+	this.parent = null;
+	this.b_number = b_number;
+    }
+}
