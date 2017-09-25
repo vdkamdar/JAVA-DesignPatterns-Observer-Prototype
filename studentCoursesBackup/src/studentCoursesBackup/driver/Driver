@@ -1,44 +1,60 @@
+package studentCoursesBackup.driver;
+
+import studentCoursesBackup.util.FileProcessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.lang.NumberFormatException;
 
 public class Driver{
     public static void main(String args[]) throws Exception{
-	    String inputFile = null;
-	    String outputFile1 = null;
-	    String outputFile2 = null;
-	    String outputFile3 = null;
+	String inputFile = null;
+	String outputFile1 = null;
+	String outputFile2 = null;
+	String outputFile3 = null;
 	
-	    if(args.length == 4){
-	        inputFile = args[0];
-	        outputFile1 = args[1];
-	        outputFile2 = args[2];
-	        outputFile3 = args[3];
-	    }
-	    else{
-    	    throw new RuntimeException("Four arguments expected!");
-	    }
+	if(args.length == 4){
+	    inputFile = args[0];
+	    outputFile1 = args[1];
+	    outputFile2 = args[2];
+	    outputFile3 = args[3];
+	}
+	else{
+	    throw new RuntimeException("Four arguments expected!");
+	}
 	
-	    FileProcessor fp = new FileProcessor(inputFile);
+	FileProcessor fp = new FileProcessor(inputFile);
 
-	    String line = null;
-	    String[] str_array = new String[2];
-	    Hashtable<Integer,ArrayList<String>> student_record = new Hashtable<Integer,ArrayList<String>>();
-	    ArrayList<String> courses = new ArrayList<String>();
+	String line = null;
+	int key = 0;
+	String[] str_array = new String[2];
+	HashMap<Integer,ArrayList<String>> student_records = new HashMap<Integer,ArrayList<String>>();
+	ArrayList<String> courses;
 	
-	    while((line = fp.readLine()) != null){    
-    	    try{
-        		str_array = line.split(":");
-		
-		        student_record.put(Integer.parseInt(str_array[0]), courses.add(str_array[1]));
-	        }
+	while((line = fp.readLine()) != null){    
+	    try{	
+		str_array = line.split(":");
+		key = Integer.parseInt(str_array[0]);
+		if(student_records.containsKey(key)){
+		    courses = student_records.get(key);
+		    courses.add(str_array[1]);
+		    student_records.put(key, courses);
+		}
+		else{
+		    courses = new ArrayList<String>();
+		    courses.add(str_array[1]);		
+		    student_records.put(key, courses);
+		}
+	    }
 
-	        catch(NumberFormatException e){
-		        throw new RuntimeException("Only integer values accepted");
-	        }
-        }
-		//CHECK FOR DUPLICATES
-		//CHECK FOR COURSES A TO K
-		//CHECK FOR BNUM 4 DIGITS
-        
-	}	
+	    catch(NumberFormatException e){
+		throw new RuntimeException("Only integer values accepted");
+	    }
+	//CHECK FOR DUPLICATES
+	//CHECK FOR COURSES A TO K
+	//CHECK FOR BNUM 4 DIGITS
+	}
+	System.out.println(Arrays.asList(student_records));
+    }
 }
