@@ -1,5 +1,9 @@
+package studentCoursesBackup.util;
+
 import java.io.FileNotFoundException;
+import studentCoursesBackup.util.TreeBuilder;
+import studentCoursesBackup.myTree.Node;
 
 public interface FileDisplayInterface{
-    public void writeToFile(String s) throws FileNotFoundException;
+    public void writeToFile(TreeBuilder tree, Node current_node) throws FileNotFoundException;
 }
