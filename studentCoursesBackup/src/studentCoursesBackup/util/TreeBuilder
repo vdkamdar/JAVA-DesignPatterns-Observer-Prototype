@@ -1,17 +1,88 @@
 package studentCoursesBackup.util;
 
+import studentCoursesBackup.myTree.Node;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class TreeBuilder{
-    private Node root;
+    public Node root;
 
     public TreeBuilder(){
 	root = null;
     }
 
-    public void insert(TreeBuiler tree, int b_number){
+    public void insert(TreeBuilder tree, int b_number){
 	if(tree.root == null){
 	    tree.root = new Node(b_number);
 	    tree.root.parent = null;
 	}
+	else{
+	    Node status = new Node(b_number);
+	    Node temp = searchNode(tree.root, b_number, status);
+	    
+	    if(temp != null){
+		return;
+	    }
+	    else{
+		insertNode(tree.root, b_number);
+	    }
+	}
+    }
+
+    public void insertNode(Node node, int b_number){
+	if(b_number < node.b_number){
+	    if(node.left == null){
+		node.left = new Node(b_number);
+		node.left.parent = node;
+	    }
+	    else{
+		insertNode(node.left, b_number);
+	    }
+	}
+	else if(b_number > node.b_number){
+	    if(node.right == null){
+		node.right = new Node(b_number);
+		node.right.parent = node;
+	    }
+	    else{
+		insertNode(node.right, b_number);
+	    }
+	}
+    }
+
+    public Node searchNode(Node node, int b_number, Node status){
+	status = null;
+	if(node.b_number == b_number){
+	    status = node;
+	}
+	else if(node.b_number > b_number){
+	    if(node.left == null){
+		status = null;
+	    }
+	    else{
+		searchNode(node.left, b_number, status);
+	    }
+	}
+	else{
+	    if(node.right == null){
+		status = null;
+	    }
+	    else{
+		searchNode(node.right, b_number, status);		
+	    }
+	}
+	return status;
+    }
+    
+    public void printNodes(TreeBuilder tree, Node current_node, ArrayList<String> outputFileResults){
 	
+	if(tree.root == null){
+	    return;
+	}
+	else if(current_node != null){
+	    printNodes(tree, current_node.left, outputFileResults);
+	    outputFileResults.add(Integer.toString(current_node.b_number));
+	    printNodes(tree, current_node.right, outputFileResults); 
+	}
     }
 }
