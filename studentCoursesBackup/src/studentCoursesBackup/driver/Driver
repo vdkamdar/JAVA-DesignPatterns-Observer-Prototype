@@ -45,13 +45,13 @@ public class Driver{
 		    courses = student_records.get(key);
 		    courses.add(str_array[1]);
 		    student_records.put(key, courses);
-		    tree.insert(tree, key);
+		    tree.insert(tree, key, student_records);
 		}
 		else{
 		    courses = new ArrayList<String>();
 		    courses.add(str_array[1]);		
 		    student_records.put(key, courses);
-		    tree.insert(tree, key);
+		    tree.insert(tree, key, student_records);
 		}
 	    }
 
@@ -59,6 +59,6 @@ public class Driver{
 		throw new RuntimeException("Only integer values accepted");
 	    }
 	}
-	results.writeToFile(tree, tree.root);
+	results.writeToFile(tree, tree.root, student_records);
     }
 }
