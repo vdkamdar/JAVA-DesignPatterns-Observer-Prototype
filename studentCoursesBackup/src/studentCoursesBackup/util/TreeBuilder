@@ -3,15 +3,16 @@ package studentCoursesBackup.util;
 import studentCoursesBackup.myTree.Node;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class TreeBuilder{
     public Node root;
-
     public TreeBuilder(){
 	root = null;
     }
-
-    public void insert(TreeBuilder tree, int b_number){
+    
+    public void insert(TreeBuilder tree, int b_number, HashMap<Integer, ArrayList<String>> student_records){
+	
 	if(tree.root == null){
 	    tree.root = new Node(b_number);
 	    tree.root.parent = null;
@@ -24,28 +25,30 @@ public class TreeBuilder{
 		return;
 	    }
 	    else{
-		insertNode(tree.root, b_number);
+		insertNode(tree.root, b_number, student_records);
 	    }
 	}
     }
 
-    public void insertNode(Node node, int b_number){
+    public void insertNode(Node node, int b_number, HashMap<Integer, ArrayList<String>> student_records){
 	if(b_number < node.b_number){
 	    if(node.left == null){
 		node.left = new Node(b_number);
 		node.left.parent = node;
+		node.courses = student_records.get(b_number);
 	    }
 	    else{
-		insertNode(node.left, b_number);
+		insertNode(node.left, b_number, student_records);
 	    }
 	}
 	else if(b_number > node.b_number){
 	    if(node.right == null){
 		node.right = new Node(b_number);
 		node.right.parent = node;
+		node.courses = student_records.get(b_number);
 	    }
 	    else{
-		insertNode(node.right, b_number);
+		insertNode(node.right, b_number, student_records);
 	    }
 	}
     }
@@ -74,15 +77,15 @@ public class TreeBuilder{
 	return status;
     }
     
-    public void printNodes(TreeBuilder tree, Node current_node, ArrayList<String> outputFileResults){
+    public void printNodes(TreeBuilder tree, Node current_node, ArrayList<String> outputFileResults, HashMap<Integer, ArrayList<String>> student_records){
 	
 	if(tree.root == null){
 	    return;
 	}
 	else if(current_node != null){
-	    printNodes(tree, current_node.left, outputFileResults);
-	    outputFileResults.add(Integer.toString(current_node.b_number));
-	    printNodes(tree, current_node.right, outputFileResults); 
+	    printNodes(tree, current_node.left, outputFileResults, student_records);
+	    outputFileResults.add(Integer.toString(current_node.b_number)+":"+student_records.get(current_node.b_number));
+	    printNodes(tree, current_node.right, outputFileResults, student_records); 
 	}
     }
 }
