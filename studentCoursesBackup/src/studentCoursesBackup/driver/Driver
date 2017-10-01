@@ -34,27 +34,39 @@ public class Driver{
 	String[] str_array = new String[2];
 	HashMap<Integer,ArrayList<String>> student_records = new HashMap<Integer,ArrayList<String>>();
 	ArrayList<String> courses;
+	
 	TreeBuilder tree = new TreeBuilder();
+	TreeBuilder backup_tree_1 = new TreeBuilder();
+	TreeBuilder backup_tree_2 = new TreeBuilder();
+	
 	Results results = new Results(outputFile1);
 	
 	while((line = fp.readLine()) != null){    
 	    try{	
 		str_array = line.split(":");
 		key = Integer.parseInt(str_array[0]);
+		
+		Node node_orig = new Node(key);
+		Node backup_node_1 = node_orig.clone();
+		Node backup_node_2 = node_orig.clone();
+
+		node_orig.registerObserver(backup_node_1);
+		node_orig.registerObserver(backup_node_2);
+		
 		if(student_records.containsKey(key)){
 		    courses = student_records.get(key);
 		    courses.add(str_array[1]);
 		    student_records.put(key, courses);
-		    tree.insert(tree, key, student_records);
+		    tree.insert(node_orig, key, student_records);
 		}
 		else{
 		    courses = new ArrayList<String>();
 		    courses.add(str_array[1]);		
 		    student_records.put(key, courses);
-		    tree.insert(tree, key, student_records);
+		    tree.insert(node_orig, key, student_records);
 		}
 	    }
-
+	    
 	    catch(NumberFormatException e){
 		throw new RuntimeException("Only integer values accepted");
 	    }
