@@ -7,58 +7,58 @@ import java.util.HashMap;
 
 public class TreeBuilder{
     public Node root;
+    
     public TreeBuilder(){
 	root = null;
     }
     
-    public void insert(TreeBuilder tree, int b_number, HashMap<Integer, ArrayList<String>> student_records){
+    public void insert(Node node_orig, int b_number, HashMap<Integer, ArrayList<String>> student_records){
 	
-	if(tree.root == null){
-	    tree.root = new Node(b_number);
-	    tree.root.parent = null;
+	if(root == null){
+	    root = node_orig;
 	}
 	else{
-	    Node status = new Node(b_number);
-	    Node temp = searchNode(tree.root, b_number, status);
-	    
-	    if(temp != null){
-		return;
+	    insertNode(root, b_number, student_records, node_orig);
+	}
+    }
+
+    public void insertNode(Node node, int b_number, HashMap<Integer, ArrayList<String>> student_records, Node node_orig){
+
+	int nodeBnumber = node.getBnumber();
+	Node left = node.getLeft();
+	Node right = node.getRight();
+	ArrayList<String> courses = node.getCourses();
+	
+	if(b_number < nodeBnumber){
+	    if(left == null){
+		node.setLeft(node_orig);
+		courses = student_records.get(b_number);
 	    }
 	    else{
-		insertNode(tree.root, b_number, student_records);
+		insertNode(left, b_number, student_records, node_orig);
+	    }
+	}
+	else if(b_number > nodeBnumber){
+	    if(right == null){
+		node.setRight(node_orig);
+		courses = student_records.get(b_number);
+	    }
+	    else{
+		insertNode(right, b_number, student_records, node_orig);
 	    }
 	}
     }
 
-    public void insertNode(Node node, int b_number, HashMap<Integer, ArrayList<String>> student_records){
-	if(b_number < node.b_number){
-	    if(node.left == null){
-		node.left = new Node(b_number);
-		node.left.parent = node;
-		node.courses = student_records.get(b_number);
-	    }
-	    else{
-		insertNode(node.left, b_number, student_records);
-	    }
-	}
-	else if(b_number > node.b_number){
-	    if(node.right == null){
-		node.right = new Node(b_number);
-		node.right.parent = node;
-		node.courses = student_records.get(b_number);
-	    }
-	    else{
-		insertNode(node.right, b_number, student_records);
-	    }
-	}
-    }
-
-    public Node searchNode(Node node, int b_number, Node status){
+  public Node searchNode(Node node, int b_number, Node status){
 	status = null;
-	if(node.b_number == b_number){
+	int nodeBnumber = node.getBnumber();
+	Node left = node.getLeft();
+	Node right = node.getRight();
+	
+	if(nodeBnumber == b_number){
 	    status = node;
 	}
-	else if(node.b_number > b_number){
+	else if(nodeBnumber > b_number){
 	    if(node.left == null){
 		status = null;
 	    }
@@ -75,17 +75,19 @@ public class TreeBuilder{
 	    }
 	}
 	return status;
-    }
-    
-    public void printNodes(TreeBuilder tree, Node current_node, ArrayList<String> outputFileResults, HashMap<Integer, ArrayList<String>> student_records){
+    }	
 	
-	if(tree.root == null){
+    public void printNodes(Node current_node, ArrayList<String> outputFileResults, HashMap<Integer, ArrayList<String>> student_records){
+	
+	if(root == null){
 	    return;
 	}
 	else if(current_node != null){
-	    printNodes(tree, current_node.left, outputFileResults, student_records);
-	    outputFileResults.add(Integer.toString(current_node.b_number)+":"+student_records.get(current_node.b_number));
-	    printNodes(tree, current_node.right, outputFileResults, student_records); 
+	    printNodes(current_node.getLeft(), outputFileResults, student_records);
+	    
+	    outputFileResults.add(Integer.toString(current_node.getBnumber())+":"+student_records.get(current_node.getBnumber()));
+	    
+	    printNodes(current_node.getRight(), outputFileResults, student_records); 
 	}
     }
 }
