@@ -2,15 +2,59 @@ package studentCoursesBackup.myTree;
 
 import java.util.ArrayList;
 
-public class Node implements ObserverI, SubjectI{
+public class Node implements ObserverI, SubjectI, Cloneable{
     private int b_number;
-    private ArrayList<String> courses = new ArrayList<String>();
-    Node newNode, left, right, parent;
-
+    private ArrayList<String> courses;
+    private ArrayList<Object> observers;
+    private Node left, right;
+    
     public Node(int b_number){
 	this.left = null;
 	this.right = null;
-	this.parent = null;
 	this.b_number = b_number;
+	this.courses = new ArrayList<String>();
+	this.observers = new ArrayList<Object>();
+    }
+    
+    public int getBnumber(){
+	return b_number;
+    }
+
+    public ArrayList<String> getCourses(){
+	return courses;
+    }
+
+    public Node getLeft(){
+	return left;
+    }
+
+    public void setLeft(Node left){
+	this.left = left;	
+    }
+
+    public Node getRight(){
+	return right;
+    }
+
+    public void setRight(Node right){
+	this.right = right;
+    }
+
+    public void registerObserver(ObserverI o){
+	observers.add(o);
+    }
+    
+    public void update(){
+    }
+
+    public Node clone(){
+	Node node_backup;
+	try{
+	    node_backup = (Node)super.clone();
+	}
+	catch(CloneNotSupportedException exception){
+	    throw new AssertionError(exception);
+	}
+	return node_backup;
     }
 }
