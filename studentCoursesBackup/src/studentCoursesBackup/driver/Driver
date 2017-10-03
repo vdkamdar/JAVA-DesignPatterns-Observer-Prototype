@@ -13,26 +13,30 @@ import java.lang.NumberFormatException;
 public class Driver{
     public static void main(String args[]) throws Exception{
 	String inputFile = null;
+	String deleteFile = null;
 	String outputFile1 = null;
 	String outputFile2 = null;
 	String outputFile3 = null;
 	
-	if(args.length == 4){
+	if(args.length == 5){
 	    inputFile = args[0];
-	    outputFile1 = args[1];
-	    outputFile2 = args[2];
-	    outputFile3 = args[3];
+	    deleteFile = args[1];
+	    outputFile1 = args[2];
+	    outputFile2 = args[3];
+	    outputFile3 = args[4];
 	}
 	else{
-	    throw new RuntimeException("Four arguments expected!");
+	    throw new RuntimeException("Five arguments expected!");
 	}
 	
-	FileProcessor fp = new FileProcessor(inputFile);
+	FileProcessor fp_input = new FileProcessor(inputFile);
+	FileProcessor fp_delete = new FileProcessor(deleteFile);
 
 	String line = null;
 	int key = 0;
 	String[] str_array = new String[2];
 	HashMap<Integer,ArrayList<String>> student_records = new HashMap<Integer,ArrayList<String>>();
+	String course;
 	ArrayList<String> courses;
 	
 	TreeBuilder tree = new TreeBuilder();
@@ -42,34 +46,48 @@ public class Driver{
 	Results results_orig = new Results(outputFile1);
 	Results results_backup_1 = new Results(outputFile2);
 	Results results_backup_2 = new Results(outputFile3);
+
+	Node status, node_orig, backup_node_1, backup_node_2;
 	
-	while((line = fp.readLine()) != null){    
+	while((line = fp_input.readLine()) != null){    
 	    try{	
 		str_array = line.split(":");
 		key = Integer.parseInt(str_array[0]);
-		
-		Node node_orig = new Node(key);
-		Node backup_node_1 = node_orig.clone();
-		Node backup_node_2 = node_orig.clone();
-
-		node_orig.registerObserver(backup_node_1);
-		node_orig.registerObserver(backup_node_2);
+		course = str_array[1];
 		
 		if(student_records.containsKey(key)){
 		    courses = student_records.get(key);
 		    courses.add(str_array[1]);
 		    student_records.put(key, courses);
-		    tree.insert(node_orig, key, student_records);
-		    backup_tree_1.insert(backup_node_1, key, student_records);
-		    backup_tree_2.insert(backup_node_2, key, student_records);
+
+		    node_orig = tree.searchNode(tree.root, key);
+		    ArrayList<String> temp = node_orig.getCourses();
+		    temp.add(course);
+		    node_orig.setCourses(temp);
+
+		    node_orig.removeObservers();
+
+		    backup_node_1 = node_orig.clone();
+		    backup_node_2 = node_orig.clone();
+		    
+		    node_orig.registerObserver(backup_node_1);
+		    node_orig.registerObserver(backup_node_2);
 		}
 		else{
 		    courses = new ArrayList<String>();
 		    courses.add(str_array[1]);		
 		    student_records.put(key, courses);
-		    tree.insert(node_orig, key, student_records);
-		    backup_tree_1.insert(backup_node_1, key, student_records);
-		    backup_tree_2.insert(backup_node_2, key, student_records); 
+		    
+		    node_orig = new Node(key, course);
+		    backup_node_1 = node_orig.clone();
+		    backup_node_2 = node_orig.clone();
+
+		    node_orig.registerObserver(backup_node_1);
+		    node_orig.registerObserver(backup_node_2);
+		    
+		    tree.insert(node_orig, key);
+		    backup_tree_1.insert(backup_node_1, key);
+		    backup_tree_2.insert(backup_node_2, key); 
 		}
 	    }
 	    
@@ -77,8 +95,23 @@ public class Driver{
 		throw new RuntimeException("Only integer values accepted");
 	    }
 	}
-	results_orig.writeToFile(tree, tree.root, student_records);
-	results_backup_1.writeToFile(backup_tree_1, backup_tree_1.root, student_records);
-	results_backup_2.writeToFile(backup_tree_2, backup_tree_2.root, student_records);
+	
+	while((line = fp_delete.readLine()) != null){    
+	    try{	
+		str_array = line.split(":");
+		key = Integer.parseInt(str_array[0]);
+		course = str_array[1];
+	
+		tree.delete(key, course);
+	    }
+	    
+	    catch(NumberFormatException e){
+		throw new RuntimeException("Only integer values accepted");
+	    }
+	}
+	
+	results_orig.writeToFile(tree, tree.root);
+	results_backup_1.writeToFile(backup_tree_1, backup_tree_1.root);
+	results_backup_2.writeToFile(backup_tree_2, backup_tree_2.root);
     }
 }
