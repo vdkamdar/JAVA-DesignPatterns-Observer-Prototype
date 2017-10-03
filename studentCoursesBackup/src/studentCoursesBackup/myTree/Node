@@ -7,12 +7,13 @@ public class Node implements ObserverI, SubjectI, Cloneable{
     private ArrayList<String> courses;
     private ArrayList<Object> observers;
     private Node left, right;
-    
-    public Node(int b_number){
+
+    public Node(int b_number, String course){
 	this.left = null;
 	this.right = null;
 	this.b_number = b_number;
 	this.courses = new ArrayList<String>();
+	(this.courses).add(course);
 	this.observers = new ArrayList<Object>();
     }
     
@@ -24,6 +25,10 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	return courses;
     }
 
+    public void setCourses(ArrayList<String> courses){
+	this.courses = courses;
+    }
+    
     public Node getLeft(){
 	return left;
     }
@@ -49,15 +54,21 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	    observers.remove(observers.indexOf(o));
         }
     }
+
+    public void removeObservers(){
+	observers.clear();
+    }
     
-    public final void notifyAll(ArrayList<String> courses){
-	for(int i=0; i<observers.size; i++){
-	    observers.get(i).update(courses);
+    public void notifyAll(ArrayList<String> courses){
+	Node temp = null;
+	for(int i=0; i<observers.size(); i++){
+	    temp = (Node)observers.get(i);
+	    temp.update(courses);
 	}
     }
 
     public void update(ArrayList<String> courses){
-	
+	this.courses = courses;
     }
 
     public Node clone(){
