@@ -44,7 +44,20 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	observers.add(o);
     }
     
-    public void update(){
+    public void removeObserver(ObserverI o){
+	if(observers.indexOf(o) >= 0){
+	    observers.remove(observers.indexOf(o));
+        }
+    }
+    
+    public final void notifyAll(ArrayList<String> courses){
+	for(int i=0; i<observers.size; i++){
+	    observers.get(i).update(courses);
+	}
+    }
+
+    public void update(ArrayList<String> courses){
+	
     }
 
     public Node clone(){
