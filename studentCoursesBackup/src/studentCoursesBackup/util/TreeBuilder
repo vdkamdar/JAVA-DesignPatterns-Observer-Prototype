@@ -12,87 +12,77 @@ public class TreeBuilder{
 	root = null;
     }
     
-    public void insert(Node node_orig, int b_number, HashMap<Integer, ArrayList<String>> student_records){
+    public void insert(Node node_orig, int b_number){
 	
 	if(root == null){
 	    root = node_orig;
 	}
 	else{
-	    insertNode(root, b_number, student_records, node_orig);
+	    insertNode(root, b_number, node_orig);
 	}
     }
 
-    public void insertNode(Node node, int b_number, HashMap<Integer, ArrayList<String>> student_records, Node node_orig){
+    public void insertNode(Node node, int b_number, Node node_orig){
 
 	int nodeBnumber = node.getBnumber();
 	Node left = node.getLeft();
 	Node right = node.getRight();
-	ArrayList<String> courses = node.getCourses();
 	
 	if(b_number < nodeBnumber){
 	    if(left == null){
 		node.setLeft(node_orig);
-		courses = student_records.get(b_number);
 	    }
 	    else{
-		insertNode(left, b_number, student_records, node_orig);
+		insertNode(left, b_number, node_orig);
 	    }
 	}
 	else if(b_number > nodeBnumber){
 	    if(right == null){
 		node.setRight(node_orig);
-		courses = student_records.get(b_number);
 	    }
 	    else{
-		insertNode(right, b_number, student_records, node_orig);
+		insertNode(right, b_number, node_orig);
 	    }
 	}
     }
 
-    public Node searchNode(Node node, int b_number, Node status){
-	status = null;
+    public Node searchNode(Node node, int b_number){
+
 	int nodeBnumber = node.getBnumber();
 	Node left = node.getLeft();
 	Node right = node.getRight();
 	
-	if(nodeBnumber == b_number){
-	    status = node;
+	if(node==null || (nodeBnumber == b_number)){
+	    return node;
 	}
-	else if(nodeBnumber > b_number){
-	    if(left == null){
-		status = null;
-	    }
-	    else{
-		searchNode(left, b_number, status);
-	    }
+	
+	if(nodeBnumber > b_number){
+	    return searchNode(left, b_number);
 	}
-	else{
-	    if(right == null){
-		status = null;
-	    }
-	    else{
-		searchNode(right, b_number, status);		
-	    }
-	}
-	return status;
+	
+	return searchNode(right, b_number);
     }
 
-    public delete(Node node, int bNumber, String course){
-	Node status = searchNode(this.root, bNumber, node);
-	ArrayList<String> courses = status.getCourses();	
+    public void delete(int bNumber, String course){
+	Node status = searchNode(this.root, bNumber);
+	if(status != null){
+	    ArrayList<String> courses = status.getCourses();
+	    courses.remove(course);
+	    status.setCourses(courses);
+	    status.notifyAll(courses);
+	}
     }
     
-    public void printNodes(Node current_node, ArrayList<String> outputFileResults, HashMap<Integer, ArrayList<String>> student_records){
-	
+    public void printNodes(Node current_node, ArrayList<String> outputFileResults){	
 	if(root == null){
 	    return;
 	}
 	else if(current_node != null){
-	    printNodes(current_node.getLeft(), outputFileResults, student_records);
+	    printNodes(current_node.getLeft(), outputFileResults);
 	    
-	    outputFileResults.add(Integer.toString(current_node.getBnumber())+":"+student_records.get(current_node.getBnumber()));
+	    outputFileResults.add(Integer.toString(current_node.getBnumber())+":"+current_node.getCourses());
 	    
-	    printNodes(current_node.getRight(), outputFileResults, student_records); 
+	    printNodes(current_node.getRight(), outputFileResults); 
 	}
     }
 }
