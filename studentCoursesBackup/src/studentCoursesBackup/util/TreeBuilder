@@ -49,7 +49,7 @@ public class TreeBuilder{
 	}
     }
 
-  public Node searchNode(Node node, int b_number, Node status){
+    public Node searchNode(Node node, int b_number, Node status){
 	status = null;
 	int nodeBnumber = node.getBnumber();
 	Node left = node.getLeft();
@@ -59,24 +59,29 @@ public class TreeBuilder{
 	    status = node;
 	}
 	else if(nodeBnumber > b_number){
-	    if(node.left == null){
+	    if(left == null){
 		status = null;
 	    }
 	    else{
-		searchNode(node.left, b_number, status);
+		searchNode(left, b_number, status);
 	    }
 	}
 	else{
-	    if(node.right == null){
+	    if(right == null){
 		status = null;
 	    }
 	    else{
-		searchNode(node.right, b_number, status);		
+		searchNode(right, b_number, status);		
 	    }
 	}
 	return status;
-    }	
-	
+    }
+
+    public delete(Node node, int bNumber, String course){
+	Node status = searchNode(this.root, bNumber, node);
+	ArrayList<String> courses = status.getCourses();	
+    }
+    
     public void printNodes(Node current_node, ArrayList<String> outputFileResults, HashMap<Integer, ArrayList<String>> student_records){
 	
 	if(root == null){
