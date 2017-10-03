@@ -39,7 +39,9 @@ public class Driver{
 	TreeBuilder backup_tree_1 = new TreeBuilder();
 	TreeBuilder backup_tree_2 = new TreeBuilder();
 	
-	Results results = new Results(outputFile1);
+	Results results_orig = new Results(outputFile1);
+	Results results_backup_1 = new Results(outputFile2);
+	Results results_backup_2 = new Results(outputFile3);
 	
 	while((line = fp.readLine()) != null){    
 	    try{	
@@ -58,12 +60,16 @@ public class Driver{
 		    courses.add(str_array[1]);
 		    student_records.put(key, courses);
 		    tree.insert(node_orig, key, student_records);
+		    backup_tree_1.insert(backup_node_1, key, student_records);
+		    backup_tree_2.insert(backup_node_2, key, student_records);
 		}
 		else{
 		    courses = new ArrayList<String>();
 		    courses.add(str_array[1]);		
 		    student_records.put(key, courses);
 		    tree.insert(node_orig, key, student_records);
+		    backup_tree_1.insert(backup_node_1, key, student_records);
+		    backup_tree_2.insert(backup_node_2, key, student_records); 
 		}
 	    }
 	    
@@ -71,6 +77,8 @@ public class Driver{
 		throw new RuntimeException("Only integer values accepted");
 	    }
 	}
-	results.writeToFile(tree, tree.root, student_records);
+	results_orig.writeToFile(tree, tree.root, student_records);
+	results_backup_1.writeToFile(backup_tree_1, backup_tree_1.root, student_records);
+	results_backup_2.writeToFile(backup_tree_2, backup_tree_2.root, student_records);
     }
 }
