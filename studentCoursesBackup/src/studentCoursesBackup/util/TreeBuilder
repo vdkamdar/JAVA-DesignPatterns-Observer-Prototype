@@ -6,14 +6,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class TreeBuilder{
-    public Node root;
+    private Node root;
     
     public TreeBuilder(){
 	root = null;
     }
+
+    public Node getRoot(){
+	return root;
+    }
     
-    public void insert(Node node_orig, int b_number){
-	
+    public void insert(Node node_orig, int b_number){	
 	if(root == null){
 	    root = node_orig;
 	}
@@ -23,7 +26,6 @@ public class TreeBuilder{
     }
 
     public void insertNode(Node node, int b_number, Node node_orig){
-
 	int nodeBnumber = node.getBnumber();
 	Node left = node.getLeft();
 	Node right = node.getRight();
@@ -46,25 +48,31 @@ public class TreeBuilder{
 	}
     }
 
+    /**
+     * @return Node - null if node not present, else returns the node
+     */
+
     public Node searchNode(Node node, int b_number){
 
-	int nodeBnumber = node.getBnumber();
-	Node left = node.getLeft();
-	Node right = node.getRight();
-	
-	if(node==null || (nodeBnumber == b_number)){
+	if(node == null){
+	    return node;
+	}
+
+	else if(node.getBnumber() == b_number){
 	    return node;
 	}
 	
-	if(nodeBnumber > b_number){
-	    return searchNode(left, b_number);
+	else if(node.getBnumber() > b_number){
+	    return searchNode(node.getLeft(), b_number);
 	}
-	
-	return searchNode(right, b_number);
+
+	else{
+	    return searchNode(node.getRight(), b_number);
+	}
     }
 
     public void delete(int bNumber, String course){
-	Node status = searchNode(this.root, bNumber);
+	Node status = searchNode(root, bNumber);
 	if(status != null){
 	    ArrayList<String> courses = status.getCourses();
 	    courses.remove(course);
