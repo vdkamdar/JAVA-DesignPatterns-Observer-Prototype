@@ -1,6 +1,7 @@
 package studentCoursesBackup.myTree;
 
 import java.util.ArrayList;
+import java.lang.CloneNotSupportedException;
 
 public class Node implements ObserverI, SubjectI, Cloneable{
     private int b_number;
@@ -16,10 +17,18 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	(this.courses).add(course);
 	this.observers = new ArrayList<Object>();
     }
+
+    /*
+     *@return int - b_number
+     **/
     
     public int getBnumber(){
 	return b_number;
     }
+
+    /*
+     *@return ArrayList<String> - courses
+     **/
 
     public ArrayList<String> getCourses(){
 	return courses;
@@ -28,6 +37,10 @@ public class Node implements ObserverI, SubjectI, Cloneable{
     public void setCourses(ArrayList<String> courses){
 	this.courses = courses;
     }
+
+    /*
+     *@returns Node - left
+     **/
     
     public Node getLeft(){
 	return left;
@@ -37,6 +50,10 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	this.left = left;	
     }
 
+     /*
+     *@returns Node - right
+     **/
+    
     public Node getRight(){
 	return right;
     }
@@ -71,13 +88,19 @@ public class Node implements ObserverI, SubjectI, Cloneable{
 	this.courses = courses;
     }
 
+    /*
+     *@returns Node - cloned Node
+     **/
+    
     public Node clone(){
 	Node node_backup;
 	try{
 	    node_backup = (Node)super.clone();
 	}
-	catch(CloneNotSupportedException exception){
-	    throw new AssertionError(exception);
+	catch(CloneNotSupportedException e){
+	    throw new AssertionError(e);
+	    e.printStackTrace();
+	    System.exit(0);
 	}
 	return node_backup;
     }
