@@ -7,8 +7,7 @@ import studentCoursesBackup.myTree.Node;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.lang.NumberFormatException;
+import java.lang.RuntimeException;
 
 public class Driver{
     public static void main(String args[]) throws Exception{
@@ -17,16 +16,22 @@ public class Driver{
 	String outputFile1 = null;
 	String outputFile2 = null;
 	String outputFile3 = null;
-	
-	if(args.length == 5){
-	    inputFile = args[0];
-	    deleteFile = args[1];
-	    outputFile1 = args[2];
-	    outputFile2 = args[3];
-	    outputFile3 = args[4];
+	try{
+	    if(args.length == 5){
+		inputFile = args[0];
+		deleteFile = args[1];
+		outputFile1 = args[2];
+		outputFile2 = args[3];
+		outputFile3 = args[4];
+	    }
+	    else{
+		throw new RuntimeException();
+	    }
 	}
-	else{
-	    throw new RuntimeException("Five arguments expected!");
+	catch (Exception e){
+	    System.err.println("Five argumemts expected!");
+	    e.printStackTrace();
+	    System.exit(0);
 	}
 	
 	FileProcessor fp_input = new FileProcessor(inputFile);
@@ -50,17 +55,17 @@ public class Driver{
 	Node status, node_orig, backup_node_1, backup_node_2;
 	
 	while((line = fp_input.readLine()) != null){    
-	    try{	
-		str_array = line.split(":");
-		key = Integer.parseInt(str_array[0]);
-		course = str_array[1];
+	    str_array = line.split(":");
+	    key = Integer.parseInt(str_array[0]);
+	    course = str_array[1];
 		
-		if(student_records.containsKey(key)){
-		    courses = student_records.get(key);
-		    courses.add(str_array[1]);
+	    if(student_records.containsKey(key)){
+		courses = student_records.get(key);
+		if(!courses.contains(course)){
+		    courses.add(course);
 		    student_records.put(key, courses);
 
-		    node_orig = tree.searchNode(tree.root, key);
+		    node_orig = tree.searchNode(tree.getRoot(), key);
 		    ArrayList<String> temp = node_orig.getCourses();
 		    temp.add(course);
 		    node_orig.setCourses(temp);
@@ -73,45 +78,35 @@ public class Driver{
 		    node_orig.registerObserver(backup_node_1);
 		    node_orig.registerObserver(backup_node_2);
 		}
-		else{
-		    courses = new ArrayList<String>();
-		    courses.add(str_array[1]);		
-		    student_records.put(key, courses);
-		    
-		    node_orig = new Node(key, course);
-		    backup_node_1 = node_orig.clone();
-		    backup_node_2 = node_orig.clone();
-
-		    node_orig.registerObserver(backup_node_1);
-		    node_orig.registerObserver(backup_node_2);
-		    
-		    tree.insert(node_orig, key);
-		    backup_tree_1.insert(backup_node_1, key);
-		    backup_tree_2.insert(backup_node_2, key); 
-		}
 	    }
-	    
-	    catch(NumberFormatException e){
-		throw new RuntimeException("Only integer values accepted");
+	    else{
+		courses = new ArrayList<String>();
+		courses.add(course);		
+		student_records.put(key, courses);
+		    
+		node_orig = new Node(key, course);
+		backup_node_1 = node_orig.clone();
+		backup_node_2 = node_orig.clone();
+
+		node_orig.registerObserver(backup_node_1);
+		node_orig.registerObserver(backup_node_2);
+		    
+		tree.insert(node_orig, key);
+		backup_tree_1.insert(backup_node_1, key);
+		backup_tree_2.insert(backup_node_2, key); 
 	    }
 	}
 	
 	while((line = fp_delete.readLine()) != null){    
-	    try{	
-		str_array = line.split(":");
-		key = Integer.parseInt(str_array[0]);
-		course = str_array[1];
+	    str_array = line.split(":");
+	    key = Integer.parseInt(str_array[0]);
+	    course = str_array[1];
 	
-		tree.delete(key, course);
-	    }
-	    
-	    catch(NumberFormatException e){
-		throw new RuntimeException("Only integer values accepted");
-	    }
+	    tree.delete(key, course);
 	}
-	
-	results_orig.writeToFile(tree, tree.root);
-	results_backup_1.writeToFile(backup_tree_1, backup_tree_1.root);
-	results_backup_2.writeToFile(backup_tree_2, backup_tree_2.root);
+	    	
+	results_orig.writeToFile(tree, tree.getRoot());
+	results_backup_1.writeToFile(backup_tree_1, backup_tree_1.getRoot());
+	results_backup_2.writeToFile(backup_tree_2, backup_tree_2.getRoot());
     }
 }
