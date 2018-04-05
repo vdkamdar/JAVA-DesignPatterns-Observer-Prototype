@@ -1,3 +1,5 @@
+# JAVA-DesignPatterns-Observer-Prototype #
+
 Assuming you are in the directory containing this README:
 
 ## To clean:
@@ -59,66 +61,3 @@ ArrayList is not fixed size, hence we can modify it more frequently when needed.
 Big O Time complexity:O(n) under normal circumstances
 
 -----------------------------------------------------------------------
-
-Provide list of citations (urls, etc.) from where you have taken/referred code
-(if any).
-
-1. Split strings based on delimiter:
-https://stackoverflow.com/questions/7787385/split-java-string-into-two-string-using-delimiter
-
-2. Usage of HashMap:
-http://www.java67.com/2013/02/10-examples-of-hashmap-in-java-programming-tutorial.html
-https://stackoverflow.com/questions/13216314/hashmap-does-not-work-with-int-char
-
-3. Difference between Map, HashMap, HashTable
-https://stackoverflow.com/questions/9588959/difference-between-hashmap-and-map-in-java
-https://stackoverflow.com/questions/40471/differences-between-hashmap-and-hashtable
-
-4. Printing HashMap
-https://stackoverflow.com/questions/5920135/printing-hashmap-in-java
-
-5. Adding string to existing HashMap
-https://stackoverflow.com/questions/29717234/java-adding-another-string-value-to-existing-hashmap-key-without-overwriting
-
-6. Passing HashMap value as an argument
-https://stackoverflow.com/questions/22806150/how-to-pass-hashmap-value-to-a-function
-
-6. Reference to implement BST
-http://www.sanfoundry.com/java-program-implement-binary-search-tree/
-http://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/
-
-7. Usage of this
-https://stackoverflow.com/questions/516768/using-this-with-methods-in-java
-https://stackoverflow.com/questions/6100402/how-does-an-object-pass-itself-as-a-parameter
-
-8. Trobuleshoot
-https://stackoverflow.com/questions/10559539/java-identifier-expected
-
-9. Prototype Pattern/Insights on cloning
-https://www.javaworld.com/article/2077578/learn-java/java-tip-76--an-alternative-to-the-deep-copy-technique.html
-https://stackoverflow.com/questions/13206094/difference-between-creating-an-object-using-new-keyword-and-using-clone-method
-https://stackoverflow.com/questions/5802118/why-we-use-clone-method-in-java
-http://forums.devshed.com/java-help-9/create-deep-copy-tree-598440.html
-http://www.j2eeonline.com/advanced-java-oop/module2/common-java-exceptions.jsp
-
-10. Usage of ArrayList
-https://www.tutorialspoint.com/java/util/arraylist_get.htm
-https://www.tutorialspoint.com/java/util/arraylist_clear.htm
-http://www.java67.com/2016/07/how-to-find-length-size-of-arraylist-in-java.html
-https://stackoverflow.com/questions/14973566/find-the-index-in-an-arraylist-that-contains-a-string
-https://stackoverflow.com/questions/19461161/remove-a-string-from-an-array-list
-https://stackoverflow.com/questions/3943582/use-of-contains-in-java-arrayliststring
-
-11. Observer pattern
-https://www.tutorialspoint.com/design_pattern/observer_pattern.htm
-https://www.journaldev.com/1739/observer-design-pattern-in-java
-
-12. Performance and Time Complexities
-http://bigocheatsheet.com/
-https://stackoverflow.com/questions/14670770/binary-search-tree-over-avl-tree
-http://infotechgems.blogspot.com/2011/11/java-collections-performance-time.html
-
-13. File I/O 
-Read file line by line: Referred to: https://rosettacode.org/wiki/Read_a_file_line_by_line#Java
-Analysed different methods to write to file: http://www.baeldung.com/java-write-to-file
-FileNotFound Exception: https://www.tutorialspoint.com/java/java_exceptions.htm
